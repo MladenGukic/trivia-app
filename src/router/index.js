@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import TriviaApp from '../views/TriviaApp'
+import ChuckApp from '../views/ChuckApp'
+
 
 Vue.use(VueRouter)
 
@@ -9,6 +11,11 @@ const routes = [
     path: '/',
     name: 'trivia',
     component: TriviaApp
+  },
+  {
+    path: '/chuck',
+    name: 'chuck',
+    component: ChuckApp
   },
   {
     path: '/about',
