@@ -4,8 +4,13 @@ class ChuckService {
     constructor() {
         this.chuck = new Chuck()
     }
-    getRandomJoke() {
-        return this.chuck.getRandomJoke()
+
+    getRandomJoke(category) {
+        return this.chuck.getRandomJoke(category)
+    }
+
+    getJokeCategories() {
+       return this.chuck.getJokeCategories() 
     }
 }
 
