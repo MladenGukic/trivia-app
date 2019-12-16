@@ -10,7 +10,7 @@
         </ul>
         <form>
           <div class="form-group">
-            <label>Example select</label>
+            <label>Select category:</label>
             <select class="form-control" v-model="category">
               <option v-for="category in categories" :key="category">{{category}}</option>
             </select>

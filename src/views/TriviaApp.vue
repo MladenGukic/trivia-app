@@ -6,8 +6,9 @@
           {{category.title}}
         </option>
       </select>
+       <input type="text" class="form-control mb-3" placeholder="Filter Trivias" v-model="filterTriviaTerm"/>
     </div>
-    <div class="container" v-for="trivia in trivias" :key="trivia.id">
+    <div class="container" v-for="trivia in currentlyVisibleTrivias" :key="trivia.id">
       <div class="card-deck mb-3 text-center">
         <div class="card mb-4 shadow-sm">
           <div class="card-header">
@@ -28,23 +29,49 @@
         </div>
       </div>
     </div>
+    <paginator-app :number-of-pages="numberOfPages" :current-page="currentPage" @selected-page="setCurrentPage" />
   </div>
 </template>
 
 <script>
+import PaginatorApp from './PaginatorApp'
 import { mapGetters } from "vuex";
 import store from "./../store";
 export default {
+  components: {
+    PaginatorApp
+  },
   data() {
     return {
-      selectedTriviasIds: []
+      selectedTriviasIds: [],
+      filterTriviaTerm: '',
+      currentPage: 1
     };
   },
   computed: {
     ...mapGetters({
       trivias: "trivias",
       categories: "categories"
-    })
+    }),
+
+    filteredTrivias() {
+      return this.trivias.filter((trivia) => {
+        return trivia.question.toLowerCase()
+          .indexOf(this.filterTriviaTerm.toLowerCase()) > -1;
+      })
+    },
+
+    currentlyVisibleTrivias() {
+      let bottomLimit = (this.currentPage - 1) * 5;
+      let topLimit = bottomLimit + 5;
+      return this.filteredTrivias.filter((trivia, index) => {
+        return index >= bottomLimit && index < topLimit;
+      })
+    },
+
+     numberOfPages() {
+      return Math.ceil(this.filteredTrivias.length / 5);
+    }
   },
 
   created() {
@@ -68,6 +95,10 @@ export default {
 
     onCategoryChanged(event) {
     store.dispatch("fetchTrivias", event.target.value);
+    },
+
+    setCurrentPage(page) {
+      this.currentPage = page;
     }
   }
 };
